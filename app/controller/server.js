@@ -1,22 +1,25 @@
-var http = require('http');
-var url = require('url');
-var fs = require('fs');
+const express = require('express');
+const app = express();
+const port = 3000;
 
-http.createServer(function (req, res) {	
-	var q = url.parse(req.url, true);
-    var __dirname = '.';
-	if (q.pathname == '/')
-		var file = (__dirname + "/../view" + "/index.html"); // __dirname is where the current script is
-	else file = (__dirname + "/../view" + q.pathname);
+_view = __dirname + '/../view';
+app.use(express.static(_view));
 
-	fs.readFile(file, function(err, data){
-		if (err) {
-			res.writeHead(404, {'Content-Type': 'text/html'});
-			return res.end("404 Not Found");
-		}
-		res.writeHead(200, {'Content-Type': 'text/html'});
-		res.write(data);
-		return res.end();
-	});		
-}).listen(8080);
+// Define routes for different HTML files
+app.get('/', (req, res) => {
+  res.sendFile(_view + '/index.html');
+});
+
+app.get('/about', (req, res) => {
+  res.sendFile(_view + '/about.html');
+});
+
+app.get('/contact', (req, res) => {
+  res.sendFile(_view + '/contact.html');
+});
+
+// Start the server
+app.listen(port, () => {
+  console.log(`Server is running on http://localhost:${port}`);
+});
 
