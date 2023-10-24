@@ -2,6 +2,9 @@ const express = require('express');
 const app = express();
 const port = 3000;
 
+// Connect to the database
+const model = require('./../model/model.js');
+
 _view = __dirname + '/../view';
 app.use(express.static(_view));
 
