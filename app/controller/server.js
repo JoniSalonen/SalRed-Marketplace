@@ -1,24 +1,21 @@
 const express = require('express');
+const path = require('path');
+
 const app = express();
-const port = 3000;
+const port = 3001;
 
 // Connect to the database
-const model = require('./../model/model.js');
+const model = require(__dirname + "/../model/model.js");
 
-_view = __dirname + '/../view';
-app.use(express.static(_view));
+_view = __dirname + "/../view";
+
+console.log(__dirname);
+
+app.use("/static", express.static(path.resolve(_view, "static")));
 
 // Define routes for different HTML files
-app.get('/', (req, res) => {
-  res.sendFile(_view + '/index.html');
-});
-
-app.get('/about', (req, res) => {
-  res.sendFile(_view + '/about.html');
-});
-
-app.get('/contact', (req, res) => {
-  res.sendFile(_view + '/contact.html');
+app.get('/*', (req, res) => {
+  res.sendFile(path.resolve(_view, "index.html")  );
 });
 
 // Start the server
