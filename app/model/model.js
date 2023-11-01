@@ -31,6 +31,22 @@ function getItems() {
   });
 }
 
+  function getId(){
+    return new Promise((resolve,reject)=>{
+      const query = 'SELECT * FROM users';
+
+      connection.query(query,(err, users) =>{
+        if(err){
+          reject(err);
+        }else {
+          console.log(users);
+          resolve(users);
+        }
+      })
+    })
+  } 
+
+
 function testConn(){
   connection.connect((err) => {
         if (err) {
@@ -46,5 +62,6 @@ function testConn(){
  */
 module.exports = { 
   testConn: testConn,
-  getItems: getItems
+  getItems: getItems,
+  getId: getId,
 };
