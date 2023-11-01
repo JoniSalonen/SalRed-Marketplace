@@ -1,6 +1,6 @@
 export default class{
-    constructor(){
 
+    constructor(){
     }
 
     setTitle(title){
@@ -8,7 +8,7 @@ export default class{
     }
 
 
-    async getHtml(){
+    async build(){
         return "";
     }
 

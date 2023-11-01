@@ -7,20 +7,34 @@ export default class extends AbstractView {
         this.setTitle("Marketplace");
     }
 
-    buildHtml(){
-        return `
-            <h1>Marketplace</h1>
-            <p>You are viewing the Marketplace!</p>
-        `;
+    /**
+     * This is a function to fetch data from the database
+     * asynchronously.
+     * Remember that you must define the route in server.js
+     */
+    async fetchData() {
+        var items = null;
+        await axios.get('/getItems')
+            .then(response => {
+                console.log(response)
+                items = response.data;
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        return items;
     }
-
     //Override
-    //Each view must build itself
-    async getHtml(){
-        let div = document.querySelector("#app");
-        let head = document.createElement("h1");
-        head.textContent = "Marketplace";
-        div.appendChild(head);
+    /**
+     * This is the function that builds the view.
+     * Once you have the data you can create the html elements
+     * accessing main
+     */
+    async build(){
+        var items = null;
+        items = await this.fetchData();
+        console.log(items);
+        document.getElementById("main").innerHTML = `<h1>Marketplace</h1>`;
     }
 
 }

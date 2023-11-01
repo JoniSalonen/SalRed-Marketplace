@@ -1,4 +1,5 @@
 import Marketplace from "./views/Marketplace.js";
+import Profile from "./views/Profile.js";
 
 const navigateTo = url => {
     history.pushState(null, null, url);
@@ -6,9 +7,16 @@ const navigateTo = url => {
 };
 
 const router = async() => {
+    /**
+     * Add new views here.
+     * Just import the view you cretaed in the views folder
+     * and add it to the array like in Marketplace
+     * After that, just build the view in its respective js file
+     * Find instructions in the Marketplace.js file
+     */
     const routes = [
         { path: '/', view: Marketplace },
-        { path: '/posts', view: () => console.log('Viewing Posts') },
+        { path: '/profile', view: Profile},
     ];
 
     const potentialMatches = routes.map(route => {
@@ -29,7 +37,7 @@ const router = async() => {
 
     const view = new match.route.view();
      
-    await view.getHtml();
+    await view.build();
 
 }
 
