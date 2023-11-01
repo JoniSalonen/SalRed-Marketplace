@@ -7,9 +7,7 @@ export default class{
         document.title = title;
     }
 
-
     async build(){
-        return "";
     }
 
 }

@@ -22,9 +22,9 @@ function getItems() {
 
     connection.query(query, (err, items) => {
       if (err) {
+        console.log(err);
         reject(err);
       } else {
-        console.log(items);
         resolve(items);
       }
     });
