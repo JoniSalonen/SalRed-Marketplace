@@ -31,6 +31,9 @@ function getItems() {
   });
 }
 
+/**
+ *  Gets users data from database
+ */
   function getId(){
     return new Promise((resolve,reject)=>{
       const query = 'SELECT * FROM users';
@@ -44,7 +47,7 @@ function getItems() {
         }
       })
     })
-  } 
+  }
 
 
 function testConn(){
