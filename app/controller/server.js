@@ -2,7 +2,7 @@ const express = require('express');
 const path = require('path');
 
 const app = express();
-const port = 3000;
+const port = 3001;
 
 // Connect to the database
 
@@ -11,6 +11,7 @@ const model = require(__dirname + "/../model/model.js");
 
 
 app.use("/static", express.static(path.resolve(_view, "static")));
+app.use(express.static(_view));
 app.use(express.json());
 
 /**
@@ -23,8 +24,6 @@ app.get('/getItems', (req, res) => {
    * to handle requests asynchronously
    */
   model.getItems().then((items) => {
-    console.log("2")
-    console.log(items);
     res.json(items);
   }).catch((err) => {
     console.log(err);
