@@ -31,12 +31,35 @@ app.get('/getItems', (req, res) => {
   })
 });
 
+
+/**
+ *  PROFILE DATA ROUTE
+ *
+ * 
+ * 
+ * Gets specific users data using id
+ */
+
+app.get('/profile/:getId(\\d+)',(req, res) => {
+
+    model.getId().then((users) => {
+      console.log("111");
+      console.log(users);
+      res.json(users[req.params.getId]);
+    }).catch((err) =>{
+      console.log(err);
+      res.json({status: "error"});
+    })
+});
+
 /**
  * This is the route that serves the html file, always the same for all routes
  */
 app.get('/*', (req, res) => {
   res.sendFile(path.resolve(_view, "index.html")  );
 });
+
+
 
 // Start the server
 app.listen(port, () => {

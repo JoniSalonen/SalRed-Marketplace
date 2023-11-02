@@ -1,5 +1,6 @@
 import Marketplace from "./views/Marketplace.js";
 import Profile from "./views/Profile.js";
+import Register from "./views/Register.js";
 
 
 const router = async() => {
@@ -13,6 +14,7 @@ const router = async() => {
    const routes = [
        { path: '/', view: Marketplace },
         { path: '/profile', view: Profile},
+        { path: '/register', view: Register },
     ];
 
     const potentialMatches = routes.map(route => {
@@ -47,11 +49,11 @@ const navigateTo = url => {
 window.addEventListener('popstate', router);
 document.addEventListener('DOMContentLoaded', () => {
 
-    document.body.addEventListener('click', e => {
-        if (e.target.matches('[data-link]')) {
-            e.preventDefault();
-            navigateTo(e.target.href);
-        }
-    });
-    router();
+  document.body.addEventListener('click', e => {
+    if (e.target.matches('[data-link]')) {
+      e.preventDefault();
+      navigateTo(e.target.href);
+    }
+  });
+  router();
 });
