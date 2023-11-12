@@ -2,8 +2,8 @@ import AbstractView from "./AbstractView.js";
 
 export default class extends AbstractView {
 
-    constructor(){
-        super();
+    constructor(params){
+        super(params);
         this.setTitle("Marketplace");
     }
 
@@ -16,7 +16,6 @@ export default class extends AbstractView {
         var items = null;
         await axios.get('/getItems')
             .then(response => {
-                console.log(response)
                 items = response.data;
             })
             .catch(error => {
@@ -34,6 +33,7 @@ export default class extends AbstractView {
         var items = null;
         items = await this.fetchData();
         var main = document.getElementById("main");
+        this.resetMain();
 
         var row = document.createElement("div");
         row.className = "row";
@@ -96,7 +96,9 @@ export default class extends AbstractView {
         div.className = "container text-center";
         var cardButton = document.createElement("a");
         div.appendChild(cardButton);
-        cardButton.className = "btn btn-primary mx-auto";
+        cardButton.className = "btn btn-primary";
+        cardButton.setAttribute("role", "button");
+        cardButton.setAttribute("data-link", "");
         cardButton.innerHTML = "Details";
         cardBody.appendChild(cardTitle);
         cardBody.appendChild(cardText);

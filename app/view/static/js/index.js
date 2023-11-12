@@ -1,7 +1,19 @@
 import Marketplace from "./views/Marketplace.js";
 import Profile from "./views/Profile.js";
 import Register from "./views/Register.js";
+import ItemView from "./views/ItemView.js";
 
+const pathToRegex = path => new RegExp('^' + path.replace(/\//g, '\\/').replace(/:\w+/g, '(.+)') + '$');    
+
+const getParams = match => {
+    const values = match.result.slice(1);
+    
+    const keys = Array.from(match.route.path.matchAll(/:(\w+)/g)).map(result => result[1]);
+    
+    return Object.fromEntries(keys.map((key, i) => {
+        return [key, values[i]];
+    }));
+}
 
 const router = async() => {
     /**
@@ -12,28 +24,29 @@ const router = async() => {
      * Find instructions in the Marketplace.js file
     */
    const routes = [
-       { path: '/', view: Marketplace },
+        { path: '/', view: Marketplace },
         { path: '/profile', view: Profile},
+        { path: '/item/:id', view: ItemView}
         { path: '/register', view: Register },
     ];
 
     const potentialMatches = routes.map(route => {
         return {
             route: route,
-            isMatch: location.pathname === route.path
+            result: location.pathname.match(pathToRegex(route.path))
         };
     });
     
-    let match = potentialMatches.find(potentialMatch => potentialMatch.isMatch);    
+    let match = potentialMatches.find(potentialMatch => potentialMatch.result !== null);    
     
     if (!match) {
         match = {
             route: routes[0],
-            isMatch: true
+            result: [location.pathname]
         };
     }
     
-    const view = new match.route.view();
+    const view = new match.route.view(getParams(match));
     
     await view.build();
     

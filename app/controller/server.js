@@ -4,14 +4,10 @@ const path = require('path');
 const app = express();
 const port = 3001;
 
-// Connect to the database
-
 _view = __dirname + "/../view";
 const model = require(__dirname + "/../model/model.js");
 
 
-app.use("/static", express.static(path.resolve(_view, "static")));
-app.use(express.static(_view));
 app.use(express.json());
 
 /**
@@ -30,6 +26,17 @@ app.get('/getItems', (req, res) => {
     res.json({status: "error"});
   })
 });
+
+app.get('/getItem', (req, res) => {
+  model.getItem(req.query.id).then((item) => {
+    res.json(item);
+  }).catch((err) => {
+    console.log(err);
+    res.json({status: "error"});
+  })
+});
+
+
 
 
 /**
@@ -52,6 +59,8 @@ app.get('/profile/:getId(\\d+)',(req, res) => {
     })
 });
 
+app.use("/static", express.static(path.resolve(_view, "static")));
+app.use(express.static(_view));
 /**
  * This is the route that serves the html file, always the same for all routes
  */
