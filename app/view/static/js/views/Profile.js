@@ -1,8 +1,7 @@
 import AbstractView from "./AbstractView.js";
 
 export default class extends AbstractView {
-  
-    constructor(){
+  constructor() {
     super();
     this.setTitle("Profile");
   }
@@ -10,12 +9,13 @@ export default class extends AbstractView {
   async fetchData() {
     var user = null;
     await axios
-      .get('/profile')
+      .get("/profile")
       .then((response) => {
         user = response.data;
+        console.log(user);
       })
-      .catch(error => {
-        console.error('Error:', error);
+      .catch((error) => {
+        console.error("Error:", error);
       });
     return user;
   }
@@ -23,19 +23,18 @@ export default class extends AbstractView {
   //Override
   async build() {
     var user = null;
-
+    user = await this.fetchData();
     // placeholder for authentication
     var authentication = false;
-
-    user = await this.fetchData();
-    console.log(user);
 
     // placeholder for authentication
     if (authentication == true) {
       // If user has logged in show this
+      console.log();
       document.getElementById("main").innerHTML = `
+            
             <h1>Profile</h1>
-            <p> Profile page</p>
+            <p>Hello ${user.username}</p>
 
         `;
     } else {
@@ -59,6 +58,6 @@ export default class extends AbstractView {
         <p></p>
         <p>Don't have account? You can create user  <a href="/register" data-link>here</a></p>
         `;
-    };
-  };
-};
+    }
+  }
+}

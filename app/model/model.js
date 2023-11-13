@@ -36,9 +36,9 @@ function getItems() {
  */
   function getId(){
     return new Promise((resolve,reject)=>{
-      const query = 'SELECT * FROM users';
+      const query = ('SELECT * FROM users');
 
-      connection.query(query,(err, users) =>{
+      connection.query(query,(err,users) =>{
         if(err){
           reject(err);
         }else {
@@ -48,6 +48,8 @@ function getItems() {
       })
     })
   }
+
+
 
 
 function testConn(){
@@ -66,5 +68,5 @@ function testConn(){
 module.exports = { 
   testConn: testConn,
   getItems: getItems,
-  getId: getId,
+  getId: getId
 };

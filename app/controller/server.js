@@ -31,7 +31,6 @@ app.get('/getItems', (req, res) => {
   })
 });
 
-
 /**
  *  PROFILE DATA ROUTE
  *
@@ -39,18 +38,16 @@ app.get('/getItems', (req, res) => {
  * 
  * Gets specific users data using id
  */
-
-app.get('/profile/:getId(\\d+)',(req, res) => {
+app.get('/profile/:id(\\d+)',(req, res) => {
 
     model.getId().then((users) => {
-      console.log("111");
-      console.log(users);
-      res.json(users[req.params.getId]);
+      res.json(users[req.params.id]);
     }).catch((err) =>{
       console.log(err);
       res.json({status: "error"});
     })
 });
+
 
 /**
  * This is the route that serves the html file, always the same for all routes
