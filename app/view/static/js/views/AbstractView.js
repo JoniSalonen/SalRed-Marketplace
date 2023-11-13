@@ -3,6 +3,8 @@ export default class{
     constructor(params){
         this.params = params;
         this.session = null;
+        this.needsLogin = false;
+        this.sessionForbidden = false;
     }
 
     setTitle(title){
@@ -20,11 +22,8 @@ export default class{
     async setSession(){
         await axios.get('/getSession')
             .then(response => {
-                console.log(response.data);
                 if(response.data.status == "ok"){
                     this.session = response.data.user;
-                    var coins = document.getElementById("coins");
-                    coins.innerHTML = "Coins: " + this.session.coins;
                 }
             })
             .catch(error => {
@@ -33,7 +32,11 @@ export default class{
     }
 
     async build(){
-        
+        this.resetMain();
+        if(this.session != null){
+            var coins = document.getElementById("coins");
+            coins.innerHTML = "Coins: " + this.session.coins;
+        }
     }
 
 }

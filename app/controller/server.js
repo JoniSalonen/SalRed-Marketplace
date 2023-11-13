@@ -42,7 +42,26 @@ app.get('/getItems', (req, res) => {
    * Queries to the model must have this syntax
    * to handle requests asynchronously
    */
-  model.getItems().then((items) => {
+  var id = -1;
+  if(req.session.user != null){
+    id = req.session.userId;
+  }
+  model.getItems(id).then((items) => {
+    res.json(items);
+  }).catch((err) => {
+    console.log(err);
+    res.json({status: "error"});
+  })
+});
+
+app.get('/getUserItems', (req, res) => {
+  /**
+   * Queries to the model must have this syntax
+   * to handle requests asynchronously
+   */
+  
+  var id = req.session.userId;
+  model.getUserItems(id).then((items) => {
     res.json(items);
   }).catch((err) => {
     console.log(err);
@@ -58,6 +77,8 @@ app.get('/getItem', (req, res) => {
     res.json({status: "error"});
   })
 });
+
+
 
 
 app.post("/postRegister", function (req, res){
@@ -125,12 +146,15 @@ app.post("/postLogin", function (req, res){
 });
 
 app.post("/logout", function (req, res){
-req.session.destroy( function (err) {
-  if(err) {
-          return console.log(err);
+  req.session.destroy( function (err) {
+      if(err) {
+          console.log(err);
+          res.json({status: "error", message: "Error, try again later"});
       }
-      res.send("You have been logged out.");
-});	
+      else{
+        res.json({status: "ok"});
+      }
+  });	
 });
 
 app.get('/getSession', (req, res) => {
@@ -143,6 +167,9 @@ app.get('/getSession', (req, res) => {
         const userRes = {};
         userRes.name = _user[0].name;
         userRes.coins = _user[0].coins;
+        userRes.id = _user[0].id;
+        userRes.sales = _user[0].sales;
+        userRes.purchases = _user[0].purchases;
         res.json({status: "ok", user: userRes});
       }
     }).catch((err) => {
@@ -154,24 +181,39 @@ app.get('/getSession', (req, res) => {
     res.json({status: "error"});
   }
 });
-/**
- *  PROFILE DATA ROUTE
- *
- * 
- * 
- * Gets specific users data using id
- */
 
-app.get('/profile/:getId(\\d+)',(req, res) => {
+app.post("/buyItem", function (req, res){
+  var id  = req.body.id;
+  var userId = req.session.userId;
+  var coins = 0;
+  var price = 0;
+  var ownerId = -1;
 
-    model.getId().then((users) => {
-      console.log("111");
-      console.log(users);
-      res.json(users[req.params.getId]);
-    }).catch((err) =>{
+  model.getItem(id).then((_item) => {
+    price = _item[0].price;
+    ownerId = _item[0].owner_id;
+
+    model.getUser(req.session.user).then((_user) => {
+      coins = _user[0].coins;
+      if(coins < price){
+        res.json({status: "error", message: "Not enough coins"});
+      }
+      else{
+        model.buyItem(id, userId, ownerId, price).then(() => {
+          res.json({status: "ok"});
+        }).catch((err) => {
+          console.log(err);
+          res.json({status: "error", message: "Error, try again later"});
+        })
+      }
+    }).catch((err) => {
       console.log(err);
-      res.json({status: "error"});
+      res.json({status: "error", message: "Error, try again later"});
     })
+  }).catch((err) => {
+    console.log(err);
+    res.json({status: "error", message: "Error, try again later"});
+  })
 });
 
 app.use("/static", express.static(path.resolve(_view, "static")));

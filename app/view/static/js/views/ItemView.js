@@ -13,6 +13,7 @@ export default class extends AbstractView {
      * Remember that you must define the route in server.js
      */
     async fetchData() {
+        
         var item = null;
         await axios.get('/getItem?id=' + this.params.id)
             .then(response => {
@@ -24,13 +25,34 @@ export default class extends AbstractView {
         return item;
     }
 
+    async buyItem(){
+        
+        var data = {
+            id: this.params.id
+        }
+        await axios.post('/buyItem', data)
+            .then(response => {
+                if(response.data.status == "error"){
+                    alert(response.data.message);
+                }
+                else{
+                    alert("Item bought successfully");
+                    window.location.href = "/";
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert("Error buying item");
+            });
+    }
+
     //Override
     async build(){
+        await super.build();
+
         var item = null;
         item = await this.fetchData();
-        console.log(item);
         var main = document.getElementById("main");
-        this.resetMain();
         //Create container for card and card
         var row = document.createElement("div");
         row.className = "row my-5";
@@ -72,20 +94,19 @@ export default class extends AbstractView {
         div.appendChild(cardButton);
         cardButton.className = "btn btn-primary";
         cardButton.setAttribute("role", "button");
-        cardButton.setAttribute("data-link", "");
-        /**
-         * 
-         * if(user.id == item.owner_id){
-         *       cardButton.innerHTML = "Edit";
-         *       cardButton.href = "/editItem/" + item.id;
-         *  }else{
-         *      cardButton.innerHTML = "Buy";
-         *      cardButton.href = "/buyItem/" + item.id;
-         * 
-         * 
-         */
-        cardButton.innerHTML = "Buy";
-        cardButton.href = "/buyItem/" + item.id;
+        cardButton.setAttribute("type", "button");
+        
+        
+        if(this.session.id == item.owner_id){
+            cardButton.innerHTML = "Edit";
+            cardButton.href = "/editItem/" + item.id;
+            cardButton.setAttribute("data-link", "");
+           }
+        else{
+            cardButton.innerHTML = "Buy";
+            cardButton.addEventListener("click", this.buyItem.bind(this));
+        }
+        
         cardBody.appendChild(div);
         card.appendChild(cardBody);
 

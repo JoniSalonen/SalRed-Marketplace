@@ -42,15 +42,23 @@ const router = async() => {
     let match = potentialMatches.find(potentialMatch => potentialMatch.result !== null);    
     
     if (!match) {
-        match = {
-            route: routes[0],
-            result: [location.pathname]
-        };
+        navigateTo("/");
+        return;
     }
     
     const view = new match.route.view(getParams(match));
+    await view.setSession();
+
+    if(view.needsLogin && view.session == null){
+        navigateTo("/login");
+    }
+    else if(view.sessionForbidden && view.session != null){
+        navigateTo("/");
+    }
+    else{
+        await view.build();
+    }
     
-    await view.build();
     
 }
 

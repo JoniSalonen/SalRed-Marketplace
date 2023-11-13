@@ -5,6 +5,7 @@ export default class extends AbstractView {
     super();
     this.setTitle("Log In");
     this.submitForm = this.submitForm.bind(this);
+    this.sessionForbidden = true;
   }
 
   isInputSafe(input) {
@@ -36,12 +37,14 @@ export default class extends AbstractView {
         })
         .catch(error => {
           console.error('Error:', error);
+            alert("Error logging in");
         });
     }
   }
 
   async build() {
-    this.resetMain();
+    await super.build();
+
     var main = document.getElementById("main");
     var container = document.createElement("div");
     container.className = "container mt-5";
