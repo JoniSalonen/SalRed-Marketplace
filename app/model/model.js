@@ -31,6 +31,22 @@ function getItems() {
   });
 }
 
+function getItem(id) {
+  return new Promise((resolve, reject) => {
+    const query = 'SELECT items.*, users.name FROM items INNER JOIN users ON items.owner_id = users.id WHERE items.id = ?;';
+
+    //Execute prepared statement, it is safer
+    connection.query(query, [id], (err, item) => {
+      if (err) {
+        console.log(err);
+        reject(err);
+      } else {
+        resolve(item);
+      }
+    });
+  });
+}
+
 /**
  *  Gets users data from database
  */
@@ -68,5 +84,6 @@ function testConn(){
 module.exports = { 
   testConn: testConn,
   getItems: getItems,
-  getId: getId
+  getItem: getItem,
+  getId: getId,
 };
