@@ -33,6 +33,7 @@ export default class extends AbstractView {
         var items = null;
         items = await this.fetchData();
         var main = document.getElementById("main");
+        this.setSession();
         this.resetMain();
 
         var row = document.createElement("div");

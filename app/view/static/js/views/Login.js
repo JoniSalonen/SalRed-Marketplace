@@ -3,7 +3,7 @@ import AbstractView from "./AbstractView.js";
 export default class extends AbstractView {
   constructor() {
     super();
-    this.setTitle("Sign Up");
+    this.setTitle("Log In");
     this.submitForm = this.submitForm.bind(this);
   }
 
@@ -25,14 +25,13 @@ export default class extends AbstractView {
         user: username,
         pwd: password
       }
-      await axios.post('/postRegister', data)
+      await axios.post('/postLogin', data)
         .then(response => {
           if(response.data.status == "error"){
             alert(response.data.message);
           }
           else{
-            alert("Registered successfully");
-            window.location.href = "/login";
+            window.location.href = "/";
           }
         })
         .catch(error => {
@@ -81,11 +80,11 @@ export default class extends AbstractView {
     var button = document.createElement("button");
     button.type = "button";
     button.className = "btn btn-primary mt-3";
-    button.innerHTML = "Register";
+    button.innerHTML = "Log in";
     form.appendChild(button);
     var p = document.createElement("p");
     p.className = "mt-3";
-    p.innerHTML = "Already have an account? <a href='/login' data-link>Log in</a>";
+    p.innerHTML = "No account yet? <a href='/register' data-link>Sign up</a>";
     form.appendChild(p);
     col.appendChild(form);
     container.appendChild(col);

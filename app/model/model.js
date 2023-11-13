@@ -47,6 +47,38 @@ function getItem(id) {
   });
 }
 
+function getUser(user) {
+  return new Promise((resolve, reject) => {
+    const query = 'SELECT * FROM users WHERE name = ?;';
+
+    //Execute prepared statement, it is safer
+    connection.query(query, [user], (err, user) => {
+      if (err) {
+        console.log(err);
+        reject(err);
+      } else {
+        resolve(user);
+      }
+    });
+  });
+}
+
+function addUser(user, hash){
+  return new Promise((resolve, reject) => {
+    const query = 'INSERT INTO users (name, passwd) VALUES (?, ?);';
+
+    //Execute prepared statement, it is safer
+    connection.query(query, [user, hash], (err, user) => {
+      if (err) {
+        console.log(err);
+        reject(err);
+      } else {
+        resolve(user);
+      }
+    });
+  });
+}
+
 /**
  *  Gets users data from database
  */
@@ -83,5 +115,7 @@ module.exports = {
   testConn: testConn,
   getItems: getItems,
   getItem: getItem,
+  getUser: getUser,
+  addUser: addUser,
   getId: getId,
 };

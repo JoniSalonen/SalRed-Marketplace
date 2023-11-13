@@ -2,6 +2,7 @@ import Marketplace from "./views/Marketplace.js";
 import Profile from "./views/Profile.js";
 import Register from "./views/Register.js";
 import ItemView from "./views/ItemView.js";
+import Login from "./views/Login.js";
 
 const pathToRegex = path => new RegExp('^' + path.replace(/\//g, '\\/').replace(/:\w+/g, '(.+)') + '$');    
 
@@ -26,8 +27,9 @@ const router = async() => {
    const routes = [
         { path: '/', view: Marketplace },
         { path: '/profile', view: Profile},
-        { path: '/item/:id', view: ItemView}
+        { path: '/item/:id', view: ItemView},
         { path: '/register', view: Register },
+        { path: '/login', view: Login },
     ];
 
     const potentialMatches = routes.map(route => {
