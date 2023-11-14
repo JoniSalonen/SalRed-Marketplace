@@ -78,7 +78,6 @@ export default class extends AbstractItemsView {
 
     main.appendChild(userContainer);
 
-    console.log(items);
     this.createMarket(items);
   }
 }

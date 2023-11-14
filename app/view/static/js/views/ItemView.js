@@ -35,6 +35,10 @@ export default class extends AbstractView {
                 if(response.data.status == "error"){
                     alert(response.data.message);
                 }
+                else if(response.data.status == "login"){
+                    alert("You must be logged in to buy items");
+                    window.location.href = "/login";
+                }
                 else{
                     alert("Item bought successfully");
                     window.location.href = "/";
@@ -97,7 +101,8 @@ export default class extends AbstractView {
         cardButton.setAttribute("type", "button");
         
         
-        if(this.session.id == item.owner_id){
+        if(this.session != null && 
+            this.session.id == item.owner_id){
             cardButton.innerHTML = "Edit";
             cardButton.href = "/editItem/" + item.id;
             cardButton.setAttribute("data-link", "");

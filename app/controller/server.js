@@ -4,10 +4,25 @@ var session = require('express-session');
 var validator = require('validator');
 var bcrypt = require('bcrypt');
 var redis = require('redis');
+const multer = require('multer');
 require('dotenv').config();
 
 const RedisStore = require("connect-redis").default;
 const app = express();
+
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    var dir = path.join(__dirname, '../view/media');
+    cb(null, dir); // Save files to the 'uploads' directory
+  },
+  filename: function (req, file, cb) {
+    // Change the filename to be a combination of the original filename and the current timestamp
+    const uniqueFilename = req.session.user + "-" +file.originalname;
+    cb(null, uniqueFilename);
+  }
+});
+
+const upload = multer({ storage: storage });
 
 const saltRounds = 10;
 
@@ -183,6 +198,11 @@ app.get('/getSession', (req, res) => {
 });
 
 app.post("/buyItem", function (req, res){
+
+  if(req.session.userId == null){
+    res.json({status: "login"});
+    return;
+  }
   var id  = req.body.id;
   var userId = req.session.userId;
   var coins = 0;
@@ -213,6 +233,38 @@ app.post("/buyItem", function (req, res){
   }).catch((err) => {
     console.log(err);
     res.json({status: "error", message: "Error, try again later"});
+  })
+});
+
+app.post('/postAddItem', upload.single('image'), (req, res) => {
+  // Access form fields and uploaded file using req.body and req.file
+  const title = req.body.title;
+  const description = req.body.description;
+  const price = req.body.price;
+  const image = req.file.filename;
+  const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png'];
+  
+  if(req.session.userId == null){
+    res.json({status: "login"});
+    deleteFile(image);
+    return;
+  }
+  if(!validator.blacklist(title, '/\{}:;<>') === title ||
+  !validator.blacklist(description, '/\{}:;<>') === description ||
+  !validator.escape(title) === title || !validator.escape(description) === description
+  || !validator.isNumeric(price) || !validator.isFloat(price)
+  || !validator.isLength(title, {min: 1, max: 50}) || !validator.isLength(description, {min: 1, max: 500})
+  || !allowedTypes.includes(req.file.mimetype)){
+    res.json({status: "error", message: "Invalid input"});
+    deleteFile(image);
+    return;
+  }
+  model.addItem(title, description, price, image, req.session.userId).then(() => {
+    res.json({status: "ok"});
+  }).catch((err) => {
+    console.log(err);
+    res.json({status: "error", message: "Error, try again later"});
+    deleteFile(image);
   })
 });
 

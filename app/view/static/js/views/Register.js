@@ -9,7 +9,7 @@ export default class extends AbstractView {
   }
 
   isInputSafe(input) {
-    const sqlRegex = /[\';\"]/;
+    const sqlRegex = /['";<>]/;
     return !sqlRegex.test(input) && input.trim().length > 0;
   }
 
