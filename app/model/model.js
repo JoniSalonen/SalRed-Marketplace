@@ -133,6 +133,37 @@ function buyItem(id, buyer_id, owner_id, price){
   });
 }
 
+function addItem(item){
+  return new Promise((resolve, reject) => {
+    const query = 'INSERT INTO items (owner_id, title, description, price, image) VALUES (?, ?, ?, ?, ?);';
+
+    //Execute prepared statement, it is safer
+    connection.query(query, [item.owner_id, item.title, item.description, item.price, item.image], (err, item) => {
+      if (err) {
+        console.log(err);
+        reject(err);
+      } else {
+        resolve(true);
+      }
+    });
+  });
+}
+
+function addCoins(id, coins){
+  return new Promise((resolve, reject) => {
+    const query = 'UPDATE users SET coins = coins + ? WHERE id = ?;';
+
+    //Execute prepared statement, it is safer
+    connection.query(query, [coins, id], (err, item) => {
+      if (err) {
+        console.log(err);
+        reject(err);
+      } else {
+        resolve(true);
+      }
+    });
+  });
+}
 
 function testConn(){
   connection.connect((err) => {
@@ -155,4 +186,6 @@ module.exports = {
   addUser: addUser,
   getUserItems: getUserItems,
   buyItem: buyItem,
+  addItem: addItem,
+  addCoins: addCoins,
 };

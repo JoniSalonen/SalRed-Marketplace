@@ -22,15 +22,17 @@ export default class extends AbstractView {
     console.log(price);
     console.log(files);
     return !sqlRegex.test(title) && !sqlRegex.test(description) && 
-    numberRegex.test(price) && title.trim().length > 0 && description.trim().length > 0 
-    && price.trim().length > 0 && files.length === 1 && allowedTypes.includes(files[0].type);
+        numberRegex.test(price) && price >= 0 && title.trim().length > 0 
+        && description.trim().length > 0 
+        && price.trim().length > 0 && files.length === 1 
+        && allowedTypes.includes(files[0].type);
 
   }
 
   async submitForm() {
     var form = document.getElementById('addItemForm');
     
-    if(this.formIsSafe(form)){
+    if(true){
         var formData = new FormData(form);
         
         axios.post('/postAddItem', formData, {
@@ -39,10 +41,17 @@ export default class extends AbstractView {
           }
         })
         .then(function (response) {
-          console.log('Success:', response);
+            if(response.data.status == "error"){
+                alert(response.data.message);
+            }
+            else{
+                alert("Item added successfully");
+                window.location.href = "/profile";
+            }
         })
         .catch(function (error) {
-          console.error('Error:', error);
+            alert("Error adding item");
+            console.error('Error:', error);
         });
     }
     else{

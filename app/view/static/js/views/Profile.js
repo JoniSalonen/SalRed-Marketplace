@@ -8,6 +8,29 @@ export default class extends AbstractItemsView {
     this.needsLogin = true;
   }
 
+  async getCoins(){
+    
+    setTimeout(() => {}, 5000);
+    await axios.get('/getCoins', {})
+      .then(response => {
+        if(response.data.status == "error"){
+          alert(response.data.message);
+        }
+        else if(response.data.status == "login"){
+          alert("You must be logged in to get coins");
+          window.location.href = "/login";
+        }
+        else{
+          var coins = response.data.coins;
+          alert("You won " + coins + " coins!");
+          document.getElementById("coins").innerHTML = "Coins: " + (this.session.coins + coins);
+        }
+      }).catch(error => {
+        console.error('Error:', error);
+        alert("Error adding coins");
+      });
+  }
+
   async fetchData() {
     var items = null;
     await axios
@@ -62,9 +85,14 @@ export default class extends AbstractItemsView {
     var button = document.createElement("button");
     button.className = "btn btn-primary";
     button.innerHTML = "Add Item";
-    button.addEventListener("click", function () {
-      window.location.href = "/addItem";
-    });
+    button.setAttribute("data-link", "");
+    button.href = "addItem";
+    var coinsbutton = document.createElement("button");
+    coinsbutton.className = "btn btn-primary me-3";
+    coinsbutton.innerHTML = "Get Coins";
+    coinsbutton.addEventListener("click", this.getCoins.bind(this));
+    
+    div.appendChild(coinsbutton);
     div.appendChild(button);
     var div2 = document.createElement("div");
     div2.className = "container text-left";

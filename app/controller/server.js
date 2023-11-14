@@ -43,6 +43,7 @@ const port = 3001;
 
 _view = __dirname + "/../view";
 const model = require(__dirname + "/../model/model.js");
+const utils = require(__dirname + "/utils.js");
 
 
 app.use(express.json());
@@ -240,31 +241,52 @@ app.post('/postAddItem', upload.single('image'), (req, res) => {
   // Access form fields and uploaded file using req.body and req.file
   const title = req.body.title;
   const description = req.body.description;
-  const price = req.body.price;
+  const price = parseFloat(req.body.price);
   const image = req.file.filename;
   const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png'];
   
   if(req.session.userId == null){
     res.json({status: "login"});
-    deleteFile(image);
+    utils.deleteFile(image);
     return;
   }
-  if(!validator.blacklist(title, '/\{}:;<>') === title ||
-  !validator.blacklist(description, '/\{}:;<>') === description ||
-  !validator.escape(title) === title || !validator.escape(description) === description
-  || !validator.isNumeric(price) || !validator.isFloat(price)
+  
+  if(sanitize(title) != title || sanitize(description) != description
+  || isNaN(price) || price < 0
   || !validator.isLength(title, {min: 1, max: 50}) || !validator.isLength(description, {min: 1, max: 500})
   || !allowedTypes.includes(req.file.mimetype)){
     res.json({status: "error", message: "Invalid input"});
-    deleteFile(image);
+    utils.deleteFile(image);
     return;
   }
-  model.addItem(title, description, price, image, req.session.userId).then(() => {
+  var item = {};
+  item.image = "/media/" + image;
+  item.title = title; 
+  item.description = description;
+  item.price = price;
+  item.owner_id = req.session.userId;
+
+  model.addItem(item).then(() => {
     res.json({status: "ok"});
   }).catch((err) => {
     console.log(err);
     res.json({status: "error", message: "Error, try again later"});
-    deleteFile(image);
+    utils.deleteFile(image);
+  })
+});
+
+app.get('/getCoins', (req, res) => {
+  if(req.session.userId == null){
+    res.json({status: "login"});
+    return;
+  }
+  req.session.userId;
+  var coins = Math.floor(Math.random() * 100) + 1;
+  model.addCoins(req.session.userId, coins).then((_user) => {
+    res.json({status: "ok", coins: coins});
+  }).catch((err) => {
+    console.log(err);
+    res.json({status: "error", message: "Error, try again later"});
   })
 });
 
