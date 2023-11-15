@@ -18,7 +18,7 @@ var connection = mysql.createConnection(
  */
 function getItems(id) {
   return new Promise((resolve, reject) => {
-    const query = 'SELECT * FROM items WHERE owner_id != ?;';
+    const query = 'SELECT items.* FROM items WHERE owner_id != ?;';
 
     connection.query(query, [id],(err, items) => {
       if (err) {
@@ -31,11 +31,26 @@ function getItems(id) {
   });
 }
 
-function getUserItems(id) {
+function getUser(name){
   return new Promise((resolve, reject) => {
-    const query = 'SELECT * FROM items WHERE owner_id = ?;';
+    const query = 'SELECT * FROM users WHERE name = ?;';
 
-    connection.query(query, [id],(err, items) => {
+    connection.query(query, [name],(err, user) => {
+      if (err) {
+        console.log(err);
+        reject(err);
+      } else {
+        resolve(user);
+      }
+    });
+  });
+}
+
+function getUserItems(name) {
+  return new Promise((resolve, reject) => {
+    const query = 'SELECT items.* FROM items INNER JOIN users ON items.owner_id = users.id WHERE users.name = ?;';
+
+    connection.query(query, [name],(err, items) => {
       if (err) {
         console.log(err);
         reject(err);
@@ -57,22 +72,6 @@ function getItem(id) {
         reject(err);
       } else {
         resolve(item);
-      }
-    });
-  });
-}
-
-function getUser(user) {
-  return new Promise((resolve, reject) => {
-    const query = 'SELECT * FROM users WHERE name = ?;';
-
-    //Execute prepared statement, it is safer
-    connection.query(query, [user], (err, user) => {
-      if (err) {
-        console.log(err);
-        reject(err);
-      } else {
-        resolve(user);
       }
     });
   });
@@ -165,6 +164,38 @@ function addCoins(id, coins){
   });
 }
 
+function editItem(item){
+  return new Promise((resolve, reject) => {
+    const query = 'UPDATE items SET description = ?, price = ? WHERE id = ?;';
+
+    //Execute prepared statement, it is safer
+    connection.query(query, [item.description, item.price, item.id], (err, item) => {
+      if (err) {
+        console.log(err);
+        reject(err);
+      } else {
+        resolve(true);
+      }
+    });
+  });
+}
+
+function deleteItem(id){
+  return new Promise((resolve, reject) => {
+    const query = 'DELETE FROM items WHERE id = ?;';
+
+    //Execute prepared statement, it is safer
+    connection.query(query, [id], (err, item) => {
+      if (err) {
+        console.log(err);
+        reject(err);
+      } else {
+        resolve(true);
+      }
+    });
+  });
+}
+
 function testConn(){
   connection.connect((err) => {
         if (err) {
@@ -188,4 +219,6 @@ module.exports = {
   buyItem: buyItem,
   addItem: addItem,
   addCoins: addCoins,
+  editItem: editItem,
+  deleteItem: deleteItem
 };

@@ -31,7 +31,7 @@ export default class extends AbstractItemsView {
      */
     async build(){
         await super.build();
-
+        
         var items = null;
         items = await this.fetchData();
         

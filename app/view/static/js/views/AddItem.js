@@ -1,8 +1,8 @@
 import AbstractView from "./AbstractView.js";
 
 export default class extends AbstractView {
-  constructor() {
-    super();
+  constructor(params) {
+    super(params);
     this.setTitle("Add Item");
     this.needsLogin = true;
   }
@@ -17,10 +17,7 @@ export default class extends AbstractView {
     var price = form.elements["price"].value;
     var files = form.elements["image"].files;
     
-    console.log(title);
-    console.log(description);
-    console.log(price);
-    console.log(files);
+    
     return !sqlRegex.test(title) && !sqlRegex.test(description) && 
         numberRegex.test(price) && price >= 0 && title.trim().length > 0 
         && description.trim().length > 0 
@@ -32,7 +29,7 @@ export default class extends AbstractView {
   async submitForm() {
     var form = document.getElementById('addItemForm');
     
-    if(true){
+    if(formIsSafe(form)){
         var formData = new FormData(form);
         
         axios.post('/postAddItem', formData, {
@@ -61,7 +58,7 @@ export default class extends AbstractView {
 
   async build() {
     await super.build();
-
+    
     var main = document.getElementById("main");
     var container = document.createElement("div");
     container.className = "container mt-5";
@@ -116,7 +113,7 @@ export default class extends AbstractView {
     inputElement.name = id;
     if (accept) inputElement.accept = accept;
     if (required) inputElement.required = true;
-    if(maxLength) inputElement.maxLength = maxLength;
+    if(maxLength) inputElement.setAttribute("maxlength", maxLength);
   
     div.appendChild(inputElement);
   
@@ -124,7 +121,7 @@ export default class extends AbstractView {
   }
   
   // Function to create textarea elements
-  createTextarea(id, className, label, rows, required) {
+  createTextarea(id, className, label, rows, required, maxLength) {
     var div = document.createElement("div");
     div.className = "form-group";
   
@@ -138,6 +135,7 @@ export default class extends AbstractView {
     textareaElement.className = className;
     textareaElement.name = id;
     textareaElement.rows = rows;
+    if (maxLength) textareaElement.setAttribute("maxlength", maxLength);
     if (required) textareaElement.required = true;
   
     div.appendChild(textareaElement);

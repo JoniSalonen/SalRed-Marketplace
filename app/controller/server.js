@@ -76,8 +76,8 @@ app.get('/getUserItems', (req, res) => {
    * to handle requests asynchronously
    */
   
-  var id = req.session.userId;
-  model.getUserItems(id).then((items) => {
+  var name = req.query.name;
+  model.getUserItems(name).then((items) => {
     res.json(items);
   }).catch((err) => {
     console.log(err);
@@ -288,6 +288,94 @@ app.get('/getCoins', (req, res) => {
     console.log(err);
     res.json({status: "error", message: "Error, try again later"});
   })
+});
+
+app.post('/postEditItem', (req, res) => {
+  const id = req.body.id;
+  const description = req.body.description;
+  const price = parseFloat(req.body.price);
+  
+  if(req.session.userId == null){
+    res.json({status: "login"});
+    return;
+  }
+  
+  if(isNaN(price) || price < 0 || sanitize(description) != description
+  || !validator.isLength(description, {min: 1, max: 500})){
+    res.json({status: "error", message: "Invalid input"});
+    return;
+  }
+  
+  model.getItem(id).then((_item) => {
+    if(_item.length == 0){
+      res.json({status: "error", message: "Item does not exist"});
+    }
+    else if(_item[0].owner_id != req.session.userId){
+      res.json({status: "error", message: "You are not the owner of the item"});
+    }
+    else{
+      var item = {};
+      item.id = id;
+      item.description = description;
+      item.price = price;
+      model.editItem(item).then(() => {
+        res.json({status: "ok"});
+      }).catch((err) => {
+        console.log(err);
+        res.json({status: "error", message: "Error, try again later"});
+      })
+    }
+  });
+});
+
+app.get('/getUser', (req, res) => {
+  
+  var user = req.query.name;
+
+  model.getUser(user).then((_user) => {
+    if(_user.length == 0){
+      res.json({status: "error"});
+    }
+    else{
+      const userRes = {};
+      userRes.name = _user[0].name;
+      userRes.coins = _user[0].coins;
+      userRes.id = _user[0].id;
+      userRes.sales = _user[0].sales;
+      userRes.purchases = _user[0].purchases;
+      res.json({status: "ok", user: userRes});
+    }
+  }).catch((err) => {
+    console.log(err);
+    res.json({status: "error"});
+  });
+});
+
+app.post(/deleteItem/, (req, res) => {
+  const id = req.body.id;
+  
+  if(req.session.userId == null){
+    res.json({status: "login"});
+    return;
+  }
+  
+  model.getItem(id).then((_item) => {
+    if(_item.length == 0){
+      res.json({status: "error", message: "Item does not exist"});
+    }
+    else if(_item[0].owner_id != req.session.userId){
+      res.json({status: "error", message: "You are not the owner of the item"});
+    }
+    else{
+      model.deleteItem(id).then(() => {
+        utils.deleteFile(utils.filename(_item[0].image));
+        res.json({status: "ok"});
+      }).catch((err) => {
+        console.log(err);
+        res.json({status: "error", message: "Error, try again later"});
+      })
+    }
+  });
 });
 
 app.use("/static", express.static(path.resolve(_view, "static")));

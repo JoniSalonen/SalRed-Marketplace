@@ -2,8 +2,8 @@ import AbstractItemsView from "./AbstractItemsView.js";
 
 export default class extends AbstractItemsView {
   
-    constructor(){
-    super();
+    constructor(params){
+    super(params);
     this.setTitle("Profile");
     this.needsLogin = true;
   }
@@ -23,7 +23,8 @@ export default class extends AbstractItemsView {
         else{
           var coins = response.data.coins;
           alert("You won " + coins + " coins!");
-          document.getElementById("coins").innerHTML = "Coins: " + (this.session.coins + coins);
+          var newCoins = this.session.coins + coins;
+          document.getElementById("coins").innerHTML = "Coins: " + newCoins;
         }
       }).catch(error => {
         console.error('Error:', error);
@@ -34,7 +35,7 @@ export default class extends AbstractItemsView {
   async fetchData() {
     var items = null;
     await axios
-      .get('/getUserItems')
+      .get('/getUserItems?name=' + this.session.name)
       .then((response) => {
         items = response.data
       })

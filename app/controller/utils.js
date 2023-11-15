@@ -10,6 +10,13 @@ function deleteFile(file) {
     });
 }
 
+function filename(file){
+    parts = file.split('/');
+    return parts[parts.length - 1];
+
+}
+
 module.exports = {
     deleteFile: deleteFile,
+    filename: filename,
 }

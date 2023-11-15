@@ -1,8 +1,8 @@
 import AbstractView from "./AbstractView.js";
 
 export default class extends AbstractView {
-  constructor() {
-    super();
+  constructor(params) {
+    super(params);
     this.setTitle("Sign Up");
     this.submitForm = this.submitForm.bind(this);
     this.sessionForbidden = true;
