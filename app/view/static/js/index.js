@@ -2,6 +2,10 @@ import Marketplace from "./views/Marketplace.js";
 import Profile from "./views/Profile.js";
 import Register from "./views/Register.js";
 import ItemView from "./views/ItemView.js";
+import Login from "./views/Login.js";
+import AddItem from "./views/AddItem.js";
+import EditItem from "./views/EditItem.js";
+import UserView from "./views/UserView.js";
 
 const pathToRegex = path => new RegExp('^' + path.replace(/\//g, '\\/').replace(/:\w+/g, '(.+)') + '$');    
 
@@ -26,8 +30,12 @@ const router = async() => {
    const routes = [
         { path: '/', view: Marketplace },
         { path: '/profile', view: Profile},
-        { path: '/item/:id', view: ItemView}
+        { path: '/item/:id', view: ItemView},
+        { path: '/editItem/:id', view: EditItem},
         { path: '/register', view: Register },
+        { path: '/login', view: Login },
+        { path: '/addItem', view: AddItem },
+        {path: '/user/:name', view: UserView},
     ];
 
     const potentialMatches = routes.map(route => {
@@ -40,15 +48,23 @@ const router = async() => {
     let match = potentialMatches.find(potentialMatch => potentialMatch.result !== null);    
     
     if (!match) {
-        match = {
-            route: routes[0],
-            result: [location.pathname]
-        };
+        navigateTo("/");
+        return;
     }
     
     const view = new match.route.view(getParams(match));
+    await view.setSession();
+
+    if(view.needsLogin && view.session == null){
+        navigateTo("/login");
+    }
+    else if(view.sessionForbidden && view.session != null){
+        navigateTo("/profile");
+    }
+    else{
+        await view.build();
+    }
     
-    await view.build();
     
 }
 
