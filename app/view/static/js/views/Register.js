@@ -8,6 +8,7 @@ export default class extends AbstractView {
     this.sessionForbidden = true;
   }
 
+  //Reg ex provided by ChatGPT
   isInputSafe(input) {
     const sqlRegex = /['";<>]/;
     return !sqlRegex.test(input) && input.trim().length > 0;
@@ -51,8 +52,11 @@ export default class extends AbstractView {
     container.className = "container mt-5";
     var col = document.createElement("div");
     col.className = "col-md-6 offset-md-3";
+
+    // Create the form to Register
     var form = document.createElement("form");
     form.id = "registerForm";
+    //Form gorup for the username
     var formGroup1 = document.createElement("div");
     formGroup1.className = "form-group";
     var label1 = document.createElement("label");
@@ -67,6 +71,7 @@ export default class extends AbstractView {
     formGroup1.appendChild(label1);
     formGroup1.appendChild(input1);
     form.appendChild(formGroup1);
+    //Form group for the password
     var formGroup2 = document.createElement("div");
     formGroup2.className = "form-group";
     var label2 = document.createElement("label");
@@ -81,19 +86,22 @@ export default class extends AbstractView {
     formGroup2.appendChild(label2);
     formGroup2.appendChild(input2);
     form.appendChild(formGroup2);
+    //Submit button
     var button = document.createElement("button");
     button.type = "button";
     button.className = "btn btn-primary mt-3";
     button.innerHTML = "Register";
     form.appendChild(button);
+    button.addEventListener("click", this.submitForm);
+    //Link to login
     var p = document.createElement("p");
     p.className = "mt-3";
     p.innerHTML = "Already have an account? <a href='/login' data-link>Log in</a>";
     form.appendChild(p);
+
     col.appendChild(form);
     container.appendChild(col);
     main.appendChild(container);
 
-    button.addEventListener("click", this.submitForm);
   }
 }

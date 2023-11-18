@@ -1,3 +1,8 @@
+/**
+ * SPA router cretaed using this tutorial: https://youtu.be/6BozpmSjk-Y?si=mbTw5DeRiFdKPQvr
+ * 
+ */
+
 import Marketplace from "./views/Marketplace.js";
 import Profile from "./views/Profile.js";
 import Register from "./views/Register.js";
@@ -7,8 +12,9 @@ import AddItem from "./views/AddItem.js";
 import EditItem from "./views/EditItem.js";
 import UserView from "./views/UserView.js";
 
+//This function is used to convert the path to a regular expression to get the parameters
+//from paths like /item/:id
 const pathToRegex = path => new RegExp('^' + path.replace(/\//g, '\\/').replace(/:\w+/g, '(.+)') + '$');    
-
 const getParams = match => {
     const values = match.result.slice(1);
     
@@ -19,14 +25,9 @@ const getParams = match => {
     }));
 }
 
+//For each path, the index checks if it has a view for it
+//If it does, it creates a new instance of the view and calls the build function
 const router = async() => {
-    /**
-     * Add new views here.
-     * Just import the view you cretaed in the views folder
-     * and add it to the array like in Marketplace
-     * After that, just build the view in its respective js file
-     * Find instructions in the Marketplace.js file
-    */
    const routes = [
         { path: '/', view: Marketplace },
         { path: '/profile', view: Profile},
@@ -47,6 +48,7 @@ const router = async() => {
     
     let match = potentialMatches.find(potentialMatch => potentialMatch.result !== null);    
     
+    //If there is no match, send to Home page
     if (!match) {
         navigateTo("/");
         return;
@@ -55,9 +57,11 @@ const router = async() => {
     const view = new match.route.view(getParams(match));
     await view.setSession();
 
+    //Redirect to log in when needed
     if(view.needsLogin && view.session == null){
         navigateTo("/login");
     }
+    //Avoid log in or registerin when logged in
     else if(view.sessionForbidden && view.session != null){
         navigateTo("/profile");
     }

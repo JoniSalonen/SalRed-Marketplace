@@ -58,12 +58,17 @@ export default class extends AbstractItemsView {
     items = await this.fetchData();
 
     var main = document.getElementById("main");
+
+    //Container to display user info
     var userContainer = document.createElement("div");
     userContainer.className = "container my-5";
+    //Username
     var name = document.createElement("h1");
     name.innerHTML = user.name;
+    //Sales
     var sales = document.createElement("h3");
     sales.innerHTML = "Sales: " + user.sales;
+    //Purchases
     var purchases = document.createElement("h3");
     purchases.innerHTML = "Purchases: " + user.purchases;
     userContainer.appendChild(name);
@@ -72,6 +77,7 @@ export default class extends AbstractItemsView {
 
     main.appendChild(userContainer);
 
+    //Display user´s items
     this.createMarket(items);
   }
 }

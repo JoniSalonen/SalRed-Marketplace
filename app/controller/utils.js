@@ -2,6 +2,7 @@ const fs = require('fs');
 const path = require('path');
 
 
+//This function was provided by ChatGPT
 function deleteFile(file) {
     fs.unlink(path.join(__dirname, '../view/media', file), (err) => {
         if (err) {
