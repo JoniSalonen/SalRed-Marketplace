@@ -93,8 +93,12 @@ export default class extends AbstractView {
     var main = document.getElementById("main");
     var container = document.createElement("div");
     container.className = "container mt-5";
+<<<<<<< Updated upstream
 
     //Row to display the item
+=======
+    container.id = "card-div";
+>>>>>>> Stashed changes
     var row = document.createElement("div");
     row.className = "row";
     var col = document.createElement("div");

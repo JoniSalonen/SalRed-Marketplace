@@ -78,12 +78,14 @@ export default class extends AbstractView {
 
         //Create column to display the item, takes half of the screen
         col1.className = "col-6 mx-auto";
+        col1.style = "max-width: 300px; max-height: 500px;";
         var card = document.createElement("div");
-        card.className = "card h-70";
+        card.className = "card h-70 pt-3 px-3";
 
         //Create card image
         var cardImage = document.createElement("img");
         cardImage.className = "card-img-top img-fluid m-auto";
+        cardImage.style = "max-width: 500px; max-height: 500px;";
         cardImage.src = item.image;
         card.appendChild(cardImage);
 
