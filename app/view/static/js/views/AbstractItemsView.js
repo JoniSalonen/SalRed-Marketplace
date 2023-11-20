@@ -11,10 +11,11 @@ export default class extends AbstractView {
         var main = document.getElementById("main");
 
         var row = document.createElement("div");
-        row.className = "row";
+        row.className = "row gx-md-5 mt-5 ";
         for(let i = 0; i < items.length; i++){
             var col1 = document.createElement("div");
-            col1.className = "col-6 col-md-4 mb-5";
+            col1.className = "col-6 col-md-4 mb-5 mw-20";
+            col1.id = "card-div";
             var card = this.newCard();
             const cardImage = card.querySelector('.card-img-top');
             const cardTitle = card.querySelector('.card-title');
@@ -37,14 +38,14 @@ export default class extends AbstractView {
 
     newCard(){
         var card = document.createElement("div");
-        card.className = "card h-100 mx-auto";
+        card.className = "card mx-auto pt-3 px-3 h-100";
         var cardImage = document.createElement("img");
         cardImage.className = "card-img-top img-fluid m-auto";
-        cardImage.style = "max-height: 20rem;";
+        cardImage.style = "max-width: 200px; max-height: 300px;";
         var cardBody = document.createElement("div");
-        cardBody.className = "card-body";
+        cardBody.className = "card-body d-flex flex-column";
         var cardTitle = document.createElement("h5");
-        cardTitle.className = "card-title";
+        cardTitle.className = "card-title mt-auto";
         var cardText = document.createElement("p");
         cardText.className = "card-text";
         cardText.id = "cardText";
@@ -55,7 +56,7 @@ export default class extends AbstractView {
         div.className = "container text-center";
         var cardButton = document.createElement("a");
         div.appendChild(cardButton);
-        cardButton.className = "btn btn-primary";
+        cardButton.className = "btn btn-primary mt-auto";
         cardButton.setAttribute("role", "button");
         cardButton.setAttribute("data-link", "");
         cardButton.innerHTML = "Details";
