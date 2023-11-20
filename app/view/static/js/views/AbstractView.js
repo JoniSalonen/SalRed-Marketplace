@@ -11,6 +11,8 @@ export default class{
         document.title = title;
     }
 
+    //Function provided by ChatGPT
+    //Reset the main div from previous view
     resetMain(){
         const parentElement = document.getElementById("main");
 
@@ -19,6 +21,7 @@ export default class{
         }
     }
 
+    //Check if the user is logged in
     async setSession(){
         await axios.get('/getSession')
             .then(response => {

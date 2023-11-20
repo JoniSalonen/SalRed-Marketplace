@@ -45,7 +45,6 @@ _view = __dirname + "/../view";
 const model = require(__dirname + "/../model/model.js");
 const utils = require(__dirname + "/utils.js");
 
-
 app.use(express.json());
 
 /**
@@ -54,10 +53,6 @@ app.use(express.json());
  */
 
 app.get('/getItems', (req, res) => {
-  /**
-   * Queries to the model must have this syntax
-   * to handle requests asynchronously
-   */
   var id = -1;
   if(req.session.user != null){
     id = req.session.userId;
@@ -70,12 +65,8 @@ app.get('/getItems', (req, res) => {
   })
 });
 
+
 app.get('/getUserItems', (req, res) => {
-  /**
-   * Queries to the model must have this syntax
-   * to handle requests asynchronously
-   */
-  
   var name = req.query.name;
   model.getUserItems(name).then((items) => {
     res.json(items);
@@ -85,6 +76,7 @@ app.get('/getUserItems', (req, res) => {
   })
 });
 
+
 app.get('/getItem', (req, res) => {
   model.getItem(req.query.id).then((item) => {
     res.json(item);
@@ -93,8 +85,6 @@ app.get('/getItem', (req, res) => {
     res.json({status: "error"});
   })
 });
-
-
 
 
 app.post("/postRegister", function (req, res){
@@ -127,6 +117,7 @@ app.post("/postRegister", function (req, res){
     })
   } 
 });
+
 
 app.post("/postLogin", function (req, res){
   var user  = req.body.user;
@@ -161,6 +152,7 @@ app.post("/postLogin", function (req, res){
   } 
 });
 
+
 app.post("/logout", function (req, res){
   req.session.destroy( function (err) {
       if(err) {
@@ -172,6 +164,7 @@ app.post("/logout", function (req, res){
       }
   });	
 });
+
 
 app.get('/getSession', (req, res) => {
   if(req.session.user != null){
@@ -197,6 +190,7 @@ app.get('/getSession', (req, res) => {
     res.json({status: "error"});
   }
 });
+
 
 app.post("/buyItem", function (req, res){
 
@@ -237,6 +231,7 @@ app.post("/buyItem", function (req, res){
   })
 });
 
+
 app.post('/postAddItem', upload.single('image'), (req, res) => {
   // Access form fields and uploaded file using req.body and req.file
   const title = req.body.title;
@@ -251,10 +246,12 @@ app.post('/postAddItem', upload.single('image'), (req, res) => {
     return;
   }
   
-  if(sanitize(title) != title || sanitize(description) != description
-  || isNaN(price) || price < 0
-  || !validator.isLength(title, {min: 1, max: 50}) || !validator.isLength(description, {min: 1, max: 500})
-  || !allowedTypes.includes(req.file.mimetype)){
+  if(sanitize(title) != title || sanitize(description) != description ||
+      isNaN(price) || price < 0 ||
+      !validator.isLength(title, {min: 1, max: 50}) || 
+      !validator.isLength(description, {min: 1, max: 500}) ||
+      !allowedTypes.includes(req.file.mimetype))
+  {
     res.json({status: "error", message: "Invalid input"});
     utils.deleteFile(image);
     return;
@@ -265,7 +262,6 @@ app.post('/postAddItem', upload.single('image'), (req, res) => {
   item.description = description;
   item.price = price;
   item.owner_id = req.session.userId;
-
   model.addItem(item).then(() => {
     res.json({status: "ok"});
   }).catch((err) => {
@@ -275,12 +271,14 @@ app.post('/postAddItem', upload.single('image'), (req, res) => {
   })
 });
 
+
 app.get('/getCoins', (req, res) => {
   if(req.session.userId == null){
     res.json({status: "login"});
     return;
   }
   req.session.userId;
+  //Give random number of coins between 1 and 100
   var coins = Math.floor(Math.random() * 100) + 1;
   model.addCoins(req.session.userId, coins).then((_user) => {
     res.json({status: "ok", coins: coins});
@@ -289,6 +287,7 @@ app.get('/getCoins', (req, res) => {
     res.json({status: "error", message: "Error, try again later"});
   })
 });
+
 
 app.post('/postEditItem', (req, res) => {
   const id = req.body.id;
@@ -328,10 +327,10 @@ app.post('/postEditItem', (req, res) => {
   });
 });
 
+
 app.get('/getUser', (req, res) => {
   
   var user = req.query.name;
-
   model.getUser(user).then((_user) => {
     if(_user.length == 0){
       res.json({status: "error"});
@@ -350,6 +349,7 @@ app.get('/getUser', (req, res) => {
     res.json({status: "error"});
   });
 });
+
 
 app.post(/deleteItem/, (req, res) => {
   const id = req.body.id;
@@ -378,6 +378,8 @@ app.post(/deleteItem/, (req, res) => {
   });
 });
 
+//This server is for a SPA so we need to redirect all requests to the index.html file
+//Here we define the middleware so that index.js works and images are displayed
 app.use("/static", express.static(path.resolve(_view, "static")));
 app.use(express.static(_view));
 /**
@@ -393,6 +395,7 @@ app.get('/*', (req, res) => {
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);
 });
+
 
 function sanitize(str){
   str = validator.blacklist(str, '/\{}:;');

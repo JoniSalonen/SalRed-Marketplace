@@ -5,8 +5,13 @@ export default class extends AbstractView {
     super(params);
     this.setTitle("Add Item");
     this.needsLogin = true;
+    this.formIsSafe = this.formIsSafe.bind(this);
   }
 
+  /*
+   * This function checks if the form is safe to submit
+   * The regular expressions were provided by ChatGPT
+   */
   formIsSafe(form) {
     const sqlRegex = /['";<>]/;
     const numberRegex = /^[0-9]+(\.[0-9]+)?$/;
@@ -29,7 +34,7 @@ export default class extends AbstractView {
   async submitForm() {
     var form = document.getElementById('addItemForm');
     
-    if(formIsSafe(form)){
+    if(this.formIsSafe(form)){  
         var formData = new FormData(form);
         
         axios.post('/postAddItem', formData, {
@@ -56,27 +61,27 @@ export default class extends AbstractView {
     }
   }
 
+
   async build() {
     await super.build();
     
     var main = document.getElementById("main");
     var container = document.createElement("div");
     container.className = "container mt-5";
+
+    // Create the form
     var form = document.createElement("form");
     form.id = "addItemForm";
-    form.action = "#"; // Replace with the appropriate URL
+    form.action = "#";
     form.method = "post";
     form.enctype = "multipart/form-data";
 
     // Create and append Upload Image input
     form.appendChild(this.createInput("file", "image", "form-control-file", "Upload Image", "image/*", true, null));
-
     // Create and append Title input
     form.appendChild(this.createInput("text", "title", "form-control", "Title", null, true, 50));
-
     // Create and append Description textarea
     form.appendChild(this.createTextarea("description", "form-control", "Description", 3, true, 500));
-
     // Create and append Price input
     form.appendChild(this.createInput("number", "price", "form-control", "Price", null, true, null));
 
@@ -94,9 +99,11 @@ export default class extends AbstractView {
 
   }
 
-  // Function to create input elements
-  
+  /**
+   * These functions were provided by ChatGPT
+   */
 
+  // Function to create input elements
   createInput(type, id, className, label, accept, required, maxLength) {
     var div = document.createElement("div");
     div.className = "form-group";

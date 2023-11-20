@@ -7,11 +7,6 @@ export default class extends AbstractView {
         this.setTitle("Item Details");
     }
 
-    /**
-     * This is a function to fetch data from the database
-     * asynchronously.
-     * Remember that you must define the route in server.js
-     */
     async fetchData() {
         
         var item = null;
@@ -71,13 +66,17 @@ export default class extends AbstractView {
     async build(){
         await super.build();
 
+        //Get the item from the server
         var item = null;
         item = await this.fetchData();
         var main = document.getElementById("main");
-        //Create container for card and card
+
+        //Create row to display the item
         var row = document.createElement("div");
         row.className = "row my-5";
         var col1 = document.createElement("div");
+
+        //Create column to display the item, takes half of the screen
         col1.className = "col-6 mx-auto";
         var card = document.createElement("div");
         card.className = "card h-70";
@@ -91,18 +90,22 @@ export default class extends AbstractView {
         //Create card body with all the info
         var cardBody = document.createElement("div");
         cardBody.className = "card-body";
+        //Ttle
         var cardTitle = document.createElement("h5");
         cardTitle.className = "card-title";
         cardTitle.innerHTML = item.title;
         cardBody.appendChild(cardTitle);
+        //Description
         var cardText = document.createElement("p");
         cardText.className = "card-text";
         cardText.innerHTML = item.description;
         cardBody.appendChild(cardText);
+        //Price
         var cardPrice = document.createElement("p");
         cardPrice.className = "card-text";
         cardPrice.innerHTML = "PRICE: " + item.price;
         cardBody.appendChild(cardPrice);
+        //Owner
         var cardOwner = document.createElement("p");
         cardOwner.className = "card-text";
         cardOwner.innerHTML = "Owned by: ";
@@ -122,7 +125,7 @@ export default class extends AbstractView {
         cardButton.setAttribute("role", "button");
         cardButton.setAttribute("type", "button");
         
-        
+        //Button for the owner
         if(this.session != null && 
             this.session.id == item.owner_id){
             cardButton.innerHTML = "Edit";
@@ -136,6 +139,7 @@ export default class extends AbstractView {
             button.innerHTML = "Delete";
             div.appendChild(button);
            }
+           //Button for the rest of users
         else{
             cardButton.innerHTML = "Buy";
             cardButton.addEventListener("click", this.buyItem.bind(this));
@@ -152,6 +156,7 @@ export default class extends AbstractView {
         main.appendChild(row);
     }
 
+    //This fucntion was provided by ChatGPT propmting it with the Bootstrap documentation
     createDialog(){
         var modalContainer = document.createElement('div');
         modalContainer.className = 'modal fade';

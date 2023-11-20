@@ -7,6 +7,10 @@ export default class extends AbstractView {
     this.needsLogin = true;
   }
 
+  /*
+   * This function checks if the form is safe to submit
+   * The regular expressions were provided by ChatGPT
+   */
   formIsSafe(form) {
     const sqlRegex = /['";<>]/;
     const numberRegex = /^[0-9]+(\.[0-9]+)?$/;
@@ -89,9 +93,13 @@ export default class extends AbstractView {
     var main = document.getElementById("main");
     var container = document.createElement("div");
     container.className = "container mt-5";
+
+    //Row to display the item
     var row = document.createElement("div");
     row.className = "row";
     var col = document.createElement("div");
+
+    //Half of the row for the image
     col.className = "col-6";
     var img = document.createElement("img");
     img.className = "img-fluid";
@@ -99,16 +107,23 @@ export default class extends AbstractView {
     col.appendChild(img);
     row.appendChild(col);
 
+    //Half of the row for the title and the form
     var col2 = document.createElement("div");
     col2.className = "col-6";
+
+    //title is not editable
     var title = document.createElement("h3");
     title.innerHTML = item.title;
     col2.appendChild(title);
 
+    //Create the form to edit the description and the price
     var form = document.createElement("form");
     form.id = "editItemForm";
+    //Textarea for the description
     form.appendChild(this.createTextarea("description", "form-control", "Description", 3, true, 500, item.description));
+    //Input for the price
     form.appendChild(this.createInput("number", "price", "form-control", "Price", null, true, null, item.price));
+    //Submit button
     var submitButton = document.createElement("button");
     submitButton.type = "button";
     submitButton.className = "btn btn-primary mt-3";
@@ -120,12 +135,13 @@ export default class extends AbstractView {
     row.appendChild(col2);
     container.appendChild(row);
     main.appendChild(container);
-
   }
 
-  // Function to create input elements
   
-
+/**
+   * These functions were provided by ChatGPT
+   */
+  
   createInput(type, id, className, label, accept, required, maxLength, content) {
     var div = document.createElement("div");
     div.className = "form-group";
@@ -150,7 +166,6 @@ export default class extends AbstractView {
     return div;
   }
   
-  // Function to create textarea elements
   createTextarea(id, className, label, rows, required, maxLength, content) {
     var div = document.createElement("div");
     div.className = "form-group";
