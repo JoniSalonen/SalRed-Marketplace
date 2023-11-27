@@ -57,7 +57,7 @@ export default class extends AbstractView {
                 }
                 else{
                     alert("Item deleted successfully");
-                    window.location.href = "/";
+                    window.location.replace("/profile");
                 }
             });
     }
@@ -80,7 +80,7 @@ export default class extends AbstractView {
         col1.className = "col-6 mx-auto";
         col1.style = "max-width: 300px; max-height: 500px;";
         var card = document.createElement("div");
-        card.className = "card h-70 pt-3 px-3";
+        card.className = "card h-70 pt-3 px-3 style-card border border-5 border-warning ";
 
         //Create card image
         var cardImage = document.createElement("img");
@@ -173,7 +173,7 @@ export default class extends AbstractView {
 
         // Create modal content
         var modalContent = document.createElement('div');
-        modalContent.className = 'modal-content';
+        modalContent.className = 'modal-content style-card';
 
         // Create modal header
         var modalHeader = document.createElement('div');

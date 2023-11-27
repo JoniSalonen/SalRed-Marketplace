@@ -92,7 +92,7 @@ export default class extends AbstractView {
 
     var main = document.getElementById("main");
     var container = document.createElement("div");
-    container.className = "container mt-5";
+    container.className = "container mt-5 text-white font-style";
     container.id = "card-div";
     var row = document.createElement("div");
     row.className = "row";

@@ -3,14 +3,26 @@
 }
 
 #body{
-    background-color: #2E1110;
+    background-color: rgb(42, 20, 18)
 }
 
 #header{
-    background-color: #94979A;
+    color: white;
+    background-color: #220c0b;
+    font-family:'Old English Text MT', fantasy;
+}
+footer{
+    background-color: #220c0b;
+    font-family:'Old English Text MT', fantasy;
 }
 
-footer{
-    background-color: #94979A;
+.style-card{
+    background-color: rgb(55, 12, 12);
+    color: white;
+    font-family:'Old English Text MT', fantasy;
+}
 
+.font-style{
+    color: white;
+    font-family:'Old English Text MT', fantasy;
 }

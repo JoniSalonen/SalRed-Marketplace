@@ -68,7 +68,7 @@ export default class extends AbstractItemsView {
     var main = document.getElementById("main");
     //Create container for user info
     var userContainer = document.createElement("div");
-    userContainer.className = "container my-5";
+    userContainer.className = "container my-5 text-white font-style";
 
     //Display name
     var name = document.createElement("h1");
@@ -96,7 +96,7 @@ export default class extends AbstractItemsView {
     button.href = "addItem";
     //Create button to get coins
     var coinsbutton = document.createElement("button");
-    coinsbutton.className = "btn btn-primary me-3";
+    coinsbutton.className = "btn btn-primary me-3 text-white";
     coinsbutton.innerHTML = "Get Coins";
     coinsbutton.addEventListener("click", this.getCoins.bind(this));
     div.appendChild(coinsbutton);

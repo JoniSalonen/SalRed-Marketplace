@@ -49,7 +49,7 @@ export default class extends AbstractView {
 
     var main = document.getElementById("main");
     var container = document.createElement("div");
-    container.className = "container mt-5";
+    container.className = "container mt-5 font-style";
     var col = document.createElement("div");
     col.className = "col-md-6 offset-md-3";
 

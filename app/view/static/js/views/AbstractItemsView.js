@@ -20,7 +20,7 @@ export default class extends AbstractView {
             //Create a new column for each item
             //In mobile 2 items per row, in desktop 3 items per row
             var col1 = document.createElement("div");
-            col1.className = "col-6 col-md-4 mb-5 mw-20";
+            col1.className = "col-xs-12 col-6 col-md-4 mb-5 mw-20";
             col1.id = "card-div";
             var card = this.newCard();
             const cardImage = card.querySelector('.card-img-top');
@@ -32,7 +32,7 @@ export default class extends AbstractView {
             cardImage.src = items[i].image;
             cardTitle.innerHTML = items[i].title;
             cardText.innerHTML = items[i].description;
-            cardPrice.innerHTML = "PRICE: " + items[i].price;
+            cardPrice.innerHTML = "Price: " + items[i].price;
             cardButton.href = "/item/" + items[i].id;
 
             //Append the card to the column and the column to the row
@@ -45,13 +45,13 @@ export default class extends AbstractView {
     newCard(){
         //Create a new card to display the item
         var card = document.createElement("div");
-        card.className = "card mx-auto pt-3 px-3 h-100";
+        card.className = "card mx-auto pt-3 px-3 h-100 border border-warning border-5 style-card";
         var cardImage = document.createElement("img");
         cardImage.className = "card-img-top img-fluid m-auto";
         cardImage.style = "max-width: 200px; max-height: 300px;";
         var cardBody = document.createElement("div");
         cardBody.className = "card-body d-flex flex-column";
-        var cardTitle = document.createElement("h5");
+        var cardTitle = document.createElement("h4");
         cardTitle.className = "card-title mt-auto";
         var cardText = document.createElement("p");
         cardText.className = "card-text";

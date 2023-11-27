@@ -48,7 +48,7 @@ export default class extends AbstractView {
             }
             else{
                 alert("Item added successfully");
-                window.location.href = "/profile";
+                window.location.replace("/profile");
             }
         })
         .catch(function (error) {
@@ -67,7 +67,7 @@ export default class extends AbstractView {
     
     var main = document.getElementById("main");
     var container = document.createElement("div");
-    container.className = "container mt-5";
+    container.className = "container mt-5 text-light";
 
     // Create the form
     var form = document.createElement("form");
@@ -88,7 +88,7 @@ export default class extends AbstractView {
     // Create and append Submit button
     var submitButton = document.createElement("button");
     submitButton.type = "button";
-    submitButton.className = "btn btn-primary mt-3";
+    submitButton.className = "btn btn-primary mt-3 font-style";
     submitButton.textContent = "Save";
     submitButton.addEventListener("click", this.submitForm.bind(this));
     form.appendChild(submitButton);
@@ -106,7 +106,7 @@ export default class extends AbstractView {
   // Function to create input elements
   createInput(type, id, className, label, accept, required, maxLength) {
     var div = document.createElement("div");
-    div.className = "form-group";
+    div.className = "form-group font-style";
   
     var labelElement = document.createElement("label");
     labelElement.for = id;
@@ -130,7 +130,7 @@ export default class extends AbstractView {
   // Function to create textarea elements
   createTextarea(id, className, label, rows, required, maxLength) {
     var div = document.createElement("div");
-    div.className = "form-group";
+    div.className = "form-group font-style";
   
     var labelElement = document.createElement("label");
     labelElement.for = id;
