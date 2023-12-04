@@ -61,7 +61,7 @@ export default class extends AbstractItemsView {
 
     //Container to display user info
     var userContainer = document.createElement("div");
-    userContainer.className = "container my-5";
+    userContainer.className = "container my-5 text-white font-style";
     //Username
     var name = document.createElement("h1");
     name.innerHTML = user.name;

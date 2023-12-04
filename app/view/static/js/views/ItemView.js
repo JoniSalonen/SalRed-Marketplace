@@ -123,7 +123,7 @@ export default class extends AbstractView {
         div.className = "container text-center";
         var cardButton = document.createElement("a");
         div.appendChild(cardButton);
-        cardButton.className = "btn btn-primary";
+        cardButton.className = "btn btn-warning";
         cardButton.setAttribute("role", "button");
         cardButton.setAttribute("type", "button");
         
@@ -134,7 +134,7 @@ export default class extends AbstractView {
             cardButton.href = "/editItem/" + item.id;
             cardButton.setAttribute("data-link", "");
             var button = document.createElement("button");
-            button.className = "btn btn-danger";
+            button.className = "btn btn-danger ms-3";
             button.setAttribute("type", "button");
             button.setAttribute("data-bs-toggle", "modal");
             button.setAttribute("data-bs-target", "#deleteDialog");

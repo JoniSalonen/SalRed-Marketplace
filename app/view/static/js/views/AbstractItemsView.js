@@ -65,7 +65,7 @@ export default class extends AbstractView {
         div.className = "container text-center";
         var cardButton = document.createElement("a");
         div.appendChild(cardButton);
-        cardButton.className = "btn btn-primary mt-auto";
+        cardButton.className = "btn btn-warning mt-auto";
         cardButton.setAttribute("role", "button");
         cardButton.setAttribute("data-link", "");
         cardButton.innerHTML = "Details";

@@ -125,7 +125,7 @@ export default class extends AbstractView {
     //Submit button
     var submitButton = document.createElement("button");
     submitButton.type = "button";
-    submitButton.className = "btn btn-primary mt-3";
+    submitButton.className = "btn btn-warning mt-3";
     submitButton.innerHTML = "Save";
     submitButton.addEventListener("click", this.submitForm.bind(this));
 

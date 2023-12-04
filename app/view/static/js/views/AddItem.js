@@ -67,7 +67,7 @@ export default class extends AbstractView {
     
     var main = document.getElementById("main");
     var container = document.createElement("div");
-    container.className = "container mt-5 text-light";
+    container.className = "container mt-5 font-style";
 
     // Create the form
     var form = document.createElement("form");
@@ -88,7 +88,7 @@ export default class extends AbstractView {
     // Create and append Submit button
     var submitButton = document.createElement("button");
     submitButton.type = "button";
-    submitButton.className = "btn btn-primary mt-3 font-style";
+    submitButton.className = "btn btn-warning mt-3 ";
     submitButton.textContent = "Save";
     submitButton.addEventListener("click", this.submitForm.bind(this));
     form.appendChild(submitButton);

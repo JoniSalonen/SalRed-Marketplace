@@ -8,6 +8,12 @@ export default class extends AbstractItemsView {
     this.needsLogin = true;
   }
 
+  oldCoins(){
+    var coinsText = document.getElementById("coins").innerText;
+    var coins = coinsText.split(" ")[1];
+    return parseInt(coins);
+  }
+
   async getCoins(){ 
     setTimeout(() => {}, 5000);
     await axios.get('/getCoins', {})
@@ -22,8 +28,9 @@ export default class extends AbstractItemsView {
         else{
           var coins = response.data.coins;
           alert("You won " + coins + " coins!");
-          var newCoins = this.session.coins + coins;
+          var newCoins = this.oldCoins() + coins;
           document.getElementById("coins").innerHTML = "Coins: " + newCoins;
+          document.getElementById("profile-coins").innerHTML = "Coins: " + newCoins;
         }
       }).catch(error => {
         console.error('Error:', error);
@@ -81,6 +88,7 @@ export default class extends AbstractItemsView {
     purchases.innerHTML = "Purchases: " + this.session.purchases;
     //Display coins
     var coins = document.createElement("h3");
+    coins.id = ("profile-coins")
     coins.innerHTML = "Coins: " + this.session.coins;
     userContainer.appendChild(name);
     userContainer.appendChild(sales);
@@ -90,13 +98,13 @@ export default class extends AbstractItemsView {
     var div = document.createElement("div");
     div.className = "container text-center";
     var button = document.createElement("button");
-    button.className = "btn btn-primary";
+    button.className = "btn btn-warning";
     button.innerHTML = "Add Item";
     button.setAttribute("data-link", "");
     button.href = "addItem";
     //Create button to get coins
     var coinsbutton = document.createElement("button");
-    coinsbutton.className = "btn btn-primary me-3 text-white";
+    coinsbutton.className = "btn btn-warning me-3";
     coinsbutton.innerHTML = "Get Coins";
     coinsbutton.addEventListener("click", this.getCoins.bind(this));
     div.appendChild(coinsbutton);
@@ -106,7 +114,6 @@ export default class extends AbstractItemsView {
     var div2 = document.createElement("div");
     div2.className = "container text-left";
     var logout = document.createElement("button");
-    button.className = "btn btn-primary";
     logout.addEventListener("click", this.logout);
     div2.appendChild(logout);
     logout.innerHTML = "Logout";
