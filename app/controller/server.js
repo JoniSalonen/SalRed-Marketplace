@@ -378,8 +378,12 @@ app.post('/deleteItem/', (req, res) => {
 });
 
 app.get('/searchByTitle', (req, res) => {
+  var id = -1;
+  if(req.session.user != null){
+    id = req.session.userId;
+  }
   var title = req.query.title;
-  model.searchByTitle(title).then((items) => {
+  model.searchByTitle(title, id).then((items) => {
     res.json(items);
   }).catch((err) => {
     console.log(err);
