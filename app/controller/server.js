@@ -191,7 +191,6 @@ app.get('/getSession', (req, res) => {
   }
 });
 
-
 app.post("/buyItem", function (req, res){
 
   if(req.session.userId == null){
@@ -351,7 +350,7 @@ app.get('/getUser', (req, res) => {
 });
 
 
-app.post(/deleteItem/, (req, res) => {
+app.post('/deleteItem/', (req, res) => {
   const id = req.body.id;
   
   if(req.session.userId == null){
@@ -376,6 +375,16 @@ app.post(/deleteItem/, (req, res) => {
       })
     }
   });
+});
+
+app.get('/searchByTitle', (req, res) => {
+  var title = req.query.title;
+  model.searchByTitle(title).then((items) => {
+    res.json(items);
+  }).catch((err) => {
+    console.log(err);
+    res.json({status: "error"});
+  })
 });
 
 //This server is for a SPA so we need to redirect all requests to the index.html file

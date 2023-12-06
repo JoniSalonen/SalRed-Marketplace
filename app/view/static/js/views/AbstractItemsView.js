@@ -10,8 +10,11 @@ export default class extends AbstractView {
         await super.build();
     }
     
-    createMarket(items){
+    createMarket(items, div){
         var main = document.getElementById("main");
+        if(div != null){
+            main = div;
+        }
 
         //Div to display the items
         var row = document.createElement("div");
