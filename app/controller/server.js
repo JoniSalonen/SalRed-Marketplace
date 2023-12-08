@@ -378,6 +378,24 @@ app.post(/deleteItem/, (req, res) => {
   });
 });
 
+app.get('/searchByTitle', (req, res) => {
+  var id = -1;
+  if(req.session.user != null){
+    id = req.session.userId;
+  }
+  var title = req.query.title;
+  if(sanitize(title) != title){
+    res.json({status: "error", message: "Error, try again later"});
+    return;
+  }
+  model.searchByTitle(title, id).then((items) => {
+    res.json(items);
+  }).catch((err) => {
+    console.log(err);
+    res.json({status: "error"});
+  })
+});
+
 //This server is for a SPA so we need to redirect all requests to the index.html file
 //Here we define the middleware so that index.js works and images are displayed
 app.use("/static", express.static(path.resolve(_view, "static")));

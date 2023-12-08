@@ -196,6 +196,22 @@ function deleteItem(id){
   });
 }
 
+function searchByTitle(title, id){
+  return new Promise((resolve, reject) => {
+    const query = 'SELECT items.* FROM items WHERE title LIKE ? AND owner_id != ?;';
+
+    //Execute prepared statement, it is safer
+    connection.query(query, ['%' + title + '%', id], (err, items) => {
+      if (err) {
+        console.log(err);
+        reject(err);
+      } else {
+        resolve(items);
+      }
+    });
+  });
+}
+
 function testConn(){
   connection.connect((err) => {
         if (err) {
@@ -220,5 +236,6 @@ module.exports = {
   addItem: addItem,
   addCoins: addCoins,
   editItem: editItem,
-  deleteItem: deleteItem
+  deleteItem: deleteItem,
+  searchByTitle: searchByTitle
 };
